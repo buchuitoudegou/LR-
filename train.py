@@ -2,6 +2,7 @@ import torch.nn as nn
 from config import epoches, lr
 import torch
 import matplotlib.pyplot as plt
+import numpy as np
 
 def predict(net, testloader, device):
   correct, total = 0, 0

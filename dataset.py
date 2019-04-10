@@ -1,5 +1,7 @@
 from torch.utils.data import Dataset
 from loader import read_csv
+import numpy as np
+import torch
 
 class MyDataset(Dataset):
   """
@@ -26,6 +28,8 @@ class MyDataset(Dataset):
     point = self.frame[0][idx]
     label = self.frame[1][idx]
     if self.transform != None:
-      point = self.transform(point)
-    sample = { 'point': point, 'label': label }
+      for fn in self.transform:
+        point = fn(point)
+        label = fn(label)
+    sample = { 'point': point.type(torch.FloatTensor), 'label': label.type(torch.FloatTensor) }
     return sample

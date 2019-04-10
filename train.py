@@ -10,8 +10,10 @@ def predict(net, testloader, device):
       point, label = data['point'], data['label']
       point, label = point.to(device), label.to(device)
       out = net(point)
-      predicted = predicted > 0.5
-      correct += (predicted == label).sum()
+      predicted = (out > 0.5).type(torch.FloatTensor)
+      # print(predicted, label)
+      result = predicted == label
+      correct += result.sum()
       total += label.size(0)
   return correct.item() / total
 
@@ -38,7 +40,7 @@ def show_accuracy(running_accuracy):
 	plt.show()
 
 def train(net, trainloader, testloader, device, optim):
-  criterion = nn.CrossEntropyLoss().to(device)
+  criterion = nn.BCELoss().to(device)
   optimizer = optim
   running_loss = []
   running_accuracy = []
@@ -49,16 +51,17 @@ def train(net, trainloader, testloader, device, optim):
       point, label = data['point'], data['label']
       point, label = point.to(device), label.to(device)
       out = net(point)
-      loss = criterion(out, label)
       optimizer.zero_grad()
+      loss = criterion(out, label)
       loss.backward()
       optimizer.step()
       temp_loss += loss.item()
       it += 1
+      # print(it)
     running_loss.append(temp_loss / it)
     it = 0
     temp_loss = 0
-    print('train: [%3d/%3d]' % (epoch, epoches))
     running_accuracy.append(predict(net, testloader, device))
+    print('train: [%3d/%3d], accuracy: %.4f' % (epoch, epoches, running_accuracy[-1]))
   show_accuracy(running_accuracy)
   show_running_loss(running_loss)

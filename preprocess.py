@@ -1,4 +1,6 @@
 import csv
+from sklearn import preprocessing
+import numpy as np
 
 filename = './data/trainSet.csv'
 
@@ -12,6 +14,9 @@ with open(filename, 'r') as f:
       row = list(map(lambda x: float(x), row))
       result.append(row)
     idx += 1
+
+result = np.array(result)
+result[:, 0:result.shape[1] - 1] = preprocessing.scale(result[:, 0:result.shape[1] - 1])
 idx = 0
 step = len(result) // 5
 for i in range(0, len(result), step):

@@ -1,5 +1,5 @@
 import torch.nn as nn
-from config import epoches, lr, l2_lambda
+from config import epoches, lr, l2_lambda, lr_decrease_epoch, lr_decrease_ratio
 import torch
 import matplotlib.pyplot as plt
 import numpy as np
@@ -44,6 +44,7 @@ def l2_penalty(var):
   return torch.sqrt(torch.pow(var, 2).sum())
 
 def train(net, trainloader, testloader, device, optim, idxx):
+  global lr
   criterion = nn.BCELoss().to(device)
   optimizer = optim
   running_loss = []
@@ -51,11 +52,11 @@ def train(net, trainloader, testloader, device, optim, idxx):
   temp_loss = 0.0
   it = 0
   for epoch in range(epoches):
-    for i, data in enumerate(trainloader):
-      if epoch % 5 == 0:
-        lr = lr / 10
+    if epoch > 0 and epoch % lr_decrease_epoch == 0:
+        lr *= lr_decrease_ratio
         for param_group in optimizer.param_groups:
           param_group['lr'] = lr
+    for i, data in enumerate(trainloader):
       point, label = data['point'], data['label']
       point, label = point.to(device), label.to(device)
       out = net(point)

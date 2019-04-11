@@ -18,7 +18,7 @@ def predict(net, testloader, device):
       total += label.size(0)
   return correct.item() / total
 
-def show_running_loss(running_loss):
+def show_running_loss(running_loss, idx):
 	x = np.array([i for i in range(len(running_loss))])
 	y = np.array(running_loss)
 	plt.figure()
@@ -27,9 +27,9 @@ def show_running_loss(running_loss):
 	plt.title('loss curve')
 	plt.xlabel('step')
 	plt.ylabel('loss value')
-	plt.show()
+	plt.savefig('./result/loss-{}.png'.format(idx))
 
-def show_accuracy(running_accuracy):
+def show_accuracy(running_accuracy, idx):
 	x = np.array([i for i in range(len(running_accuracy))])
 	y = np.array(running_accuracy)
 	plt.figure()
@@ -38,9 +38,9 @@ def show_accuracy(running_accuracy):
 	plt.title('accuracy curve')
 	plt.xlabel('step')
 	plt.ylabel('accuracy')
-	plt.show()
+	plt.savefig('./result/accuracy-{}.png'.format(idx))
 
-def train(net, trainloader, testloader, device, optim):
+def train(net, trainloader, testloader, device, optim, idxx):
   criterion = nn.BCELoss().to(device)
   optimizer = optim
   running_loss = []
@@ -64,5 +64,6 @@ def train(net, trainloader, testloader, device, optim):
     temp_loss = 0
     running_accuracy.append(predict(net, testloader, device))
     print('train: [%3d/%3d], accuracy: %.4f' % (epoch, epoches, running_accuracy[-1]))
-  show_accuracy(running_accuracy)
-  show_running_loss(running_loss)
+  show_accuracy(running_accuracy, idxx)
+  show_running_loss(running_loss, idxx)
+  return net, running_accuracy[-1]

@@ -70,8 +70,12 @@ def train(net, trainloader, testloader, device, optim, idxx):
     running_loss.append(temp_loss / it)
     it = 0
     temp_loss = 0
-    running_accuracy.append(predict(net, testloader, device))
-    print('train: [%3d/%3d], accuracy: %.4f' % (epoch, epoches, running_accuracy[-1]))
-  show_accuracy(running_accuracy, idxx)
-  show_running_loss(running_loss, idxx)
-  return net, running_accuracy[-1]
+    if testloader != None:
+      running_accuracy.append(predict(net, testloader, device))
+      print('train: [%3d/%3d], accuracy: %.4f' % (epoch, epoches, running_accuracy[-1]))
+    else:
+       print('train: [%3d/%3d], loss: %.4f' % (epoch, epoches, running_loss[-1]))
+  if testloader != None:
+    show_accuracy(running_accuracy, idxx)
+    show_running_loss(running_loss, idxx)
+  return net, (running_accuracy[-1] if testloader != None else None)

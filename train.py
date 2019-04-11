@@ -1,5 +1,5 @@
 import torch.nn as nn
-from config import epoches, lr
+from config import epoches, lr, l2_lambda
 import torch
 import matplotlib.pyplot as plt
 import numpy as np
@@ -40,6 +40,9 @@ def show_accuracy(running_accuracy, idx):
 	plt.ylabel('accuracy')
 	plt.savefig('./result/accuracy-{}.png'.format(idx))
 
+def l2_penalty(var):
+  return torch.sqrt(torch.pow(var, 2).sum())
+
 def train(net, trainloader, testloader, device, optim, idxx):
   criterion = nn.BCELoss().to(device)
   optimizer = optim
@@ -49,16 +52,20 @@ def train(net, trainloader, testloader, device, optim, idxx):
   it = 0
   for epoch in range(epoches):
     for i, data in enumerate(trainloader):
+      if epoch % 5 == 0:
+        lr = lr / 10
+        for param_group in optimizer.param_groups:
+          param_group['lr'] = lr
       point, label = data['point'], data['label']
       point, label = point.to(device), label.to(device)
       out = net(point)
       optimizer.zero_grad()
       loss = criterion(out, label)
+      loss += l2_lambda * l2_penalty(out)
       loss.backward()
       optimizer.step()
       temp_loss += loss.item()
       it += 1
-      # print(it)
     running_loss.append(temp_loss / it)
     it = 0
     temp_loss = 0

@@ -56,7 +56,7 @@ def train_test():
 def train_model():
   device = torch.device('cpu')
   transform = [torch.tensor]
-  train_files = ['./data/fold-{}.csv'.format(i) for i in range(5)]
+  train_files = ['../data/fold-{}.csv'.format(i) for i in range(5)]
   print(train_files)
   trainset = MyDataset(train_files, transform=transform)
   trainloader = DataLoader(dataset=trainset, batch_size=batch_size, shuffle=True)

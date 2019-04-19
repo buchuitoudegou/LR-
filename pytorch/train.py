@@ -27,7 +27,7 @@ def show_running_loss(running_loss, idx):
 	plt.title('loss curve')
 	plt.xlabel('step')
 	plt.ylabel('loss value')
-	plt.savefig('./result/loss-{}.png'.format(idx))
+	plt.savefig('../result/loss-{}.png'.format(idx))
 
 def show_accuracy(running_accuracy, idx):
 	x = np.array([i for i in range(len(running_accuracy))])
@@ -38,7 +38,7 @@ def show_accuracy(running_accuracy, idx):
 	plt.title('accuracy curve')
 	plt.xlabel('step')
 	plt.ylabel('accuracy')
-	plt.savefig('./result/accuracy-{}.png'.format(idx))
+	plt.savefig('../result/accuracy-{}.png'.format(idx))
 
 def l2_penalty(var):
   return torch.sqrt(torch.pow(var, 2).sum())

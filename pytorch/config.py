@@ -26,13 +26,13 @@
 # lr_decrease_epoch = 7
 # -------------------------------
 # -----accuracy = 0.603985 ------
-epoches = 40
-lr = 8e-5
-l2_lambda = 1e-3
-batch_size = 256
-momentum = 0.99
-lr_decrease_ratio = 0.95
-lr_decrease_epoch = 10
+# epoches = 40
+# lr = 8e-5
+# l2_lambda = 1e-3
+# batch_size = 256
+# momentum = 0.99
+# lr_decrease_ratio = 0.95
+# lr_decrease_epoch = 10
 # -------------------------------
 # -----accuracy = 0.603924 ------
 # epoches = 40
@@ -69,4 +69,22 @@ lr_decrease_epoch = 10
 # momentum = 0.99
 # lr_decrease_ratio = 0.5
 # lr_decrease_epoch = 15
+# -------------------------------
+# -----accuracy = 0.603605 ------
+epoches = 40
+lr = 8e-5
+l2_lambda = 1e-3
+batch_size = 256
+momentum = 0.99
+lr_decrease_ratio = 0.5
+lr_decrease_epoch = 10
+# -------------------------------
+# -----accuracy =  ------
+# epoches = 40
+# lr = 8e-5
+# l2_lambda = 1e-3
+# batch_size = 512
+# momentum = 0.99
+# lr_decrease_ratio = 0.5
+# lr_decrease_epoch = 10
 # -------------------------------

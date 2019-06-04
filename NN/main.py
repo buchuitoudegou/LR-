@@ -9,6 +9,8 @@ import csv
 import numpy as np
 from sklearn import preprocessing
 
+cuda_available = torch.cuda.is_available()
+
 def predict():
   result = []
   idx = 0
@@ -60,12 +62,14 @@ def train_test():
     trainloader = DataLoader(dataset=trainset, batch_size=batch_size, shuffle=True)
     testloader = DataLoader(dataset=testset, batch_size=batch_size, shuffle=False)
     net = NN(32, 1)
+    if cuda_available:
+      net = net.cuda()
     optimizer = optim.SGD(net.parameters(), lr=lr, momentum=momentum)
-    net, acc = train(net, trainloader, testloader, device, optimizer, idx)
+    net, acc = train(net, trainloader, testloader, cuda_available, optimizer, idx)
     accuracies.append(acc)
   print(sum(accuracies) / len(accuracies))
 
 if __name__ == "__main__":
-  # train_test()
-  train_model()
-  predict()
+  train_test()
+  # train_model()
+  # predict()

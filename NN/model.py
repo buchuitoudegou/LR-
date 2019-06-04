@@ -6,11 +6,18 @@ class NN(nn.Module):
   def __init__(self, n_input, n_output):
     super(NN, self).__init__()
     self.seq = nn.Sequential(
-      nn.Linear(n_input, 100),
+      nn.Linear(n_input, 128),
       nn.ReLU(),
-      nn.Linear(100, 50),
+      # nn.Dropout(0.2),
+      nn.Linear(128, 512),
       nn.ReLU(),
-      nn.Linear(50, 1),
+      nn.Linear(512, 1024),
+      nn.ReLU(),
+      nn.Linear(1024, 512),
+      nn.ReLU(),
+      nn.Linear(512, 128),
+      nn.ReLU(),
+      nn.Linear(128, 1),
       nn.Sigmoid()
     )
   

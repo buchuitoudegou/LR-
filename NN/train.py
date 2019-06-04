@@ -4,14 +4,19 @@ import torch
 import matplotlib.pyplot as plt
 import numpy as np
 
+tocuda = torch.device('cuda')
+
 def predict(net, testloader, device):
   correct, total = 0, 0
   with torch.no_grad():
     for data in testloader:
       point, label = data['point'], data['label']
-      point, label = point.to(device), label.to(device)
+      if device:
+        point, label = point.to(tocuda), label.to(tocuda)
       out = net(point)
       predicted = (out > 0.5).type(torch.FloatTensor)
+      if device:
+        predicted = predicted.to(tocuda)
       # print(predicted, label)
       result = predicted == label
       correct += result.sum()
@@ -45,7 +50,9 @@ def l2_penalty(var):
 
 def train(net, trainloader, testloader, device, optim, idxx):
   global lr
-  criterion = nn.BCELoss().to(device)
+  criterion = nn.BCELoss()
+  if device:
+    criterion = criterion.cuda()
   optimizer = optim
   running_loss = []
   running_accuracy = []
@@ -58,7 +65,8 @@ def train(net, trainloader, testloader, device, optim, idxx):
           param_group['lr'] = lr
     for i, data in enumerate(trainloader):
       point, label = data['point'], data['label']
-      point, label = point.to(device), label.to(device)
+      if device:
+        point, label = point.to(tocuda), label.cuda(tocuda)
       out = net(point)
       optimizer.zero_grad()
       loss = criterion(out, label)

@@ -72,9 +72,9 @@
 # -------------------------------
 # -----accuracy = 0.603605 ------
 epoches = 40
-lr = 8e-5
+lr = 1e-3
 l2_lambda = 1e-3
-batch_size = 256
+batch_size = 512
 momentum = 0.99
 lr_decrease_ratio = 0.5
 lr_decrease_epoch = 10
